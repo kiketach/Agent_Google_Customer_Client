@@ -1,0 +1,19 @@
+[
+  {
+    "query": "hola,",
+    "expected_tool_use": [],
+    "reference": "¡Hola! Bienvenido nuevamente a Zapatillas Hat Trick 👋🏼 Veo que ya eres cliente nuestro. ¿Te gustaría ver nuevos modelos, repetir tu último pedido o hacer una cotización personalizada?"
+  },
+  {
+    "query": "¿Qué tengo en mi carrito?",
+    "expected_tool_use": [
+      {
+        "tool_name": "access_cart_information",
+        "tool_input": {
+          "customer_id": "123"
+        }
+      }
+    ],
+    "reference": "En tu carrito actual tienes 2 pares del modelo *Zamba* en cuero con suela de goma, personalizados con el nombre 'Carlos #10', y 1 par del modelo *Dynamic* en sintético con suela negra. ¿Te gustaría confirmar este pedido o hacer algún cambio?"
+  }
+]

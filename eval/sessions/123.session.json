@@ -1,0 +1,246 @@
+{
+  "id": "zht-session-001",
+  "app_name": "customer_service_agent",
+  "user_id": "cliente_001",
+  "state": {
+    "customer_profile": {
+      "account_number": "ZHT20250429001",
+      "customer_id": "001",
+      "customer_first_name": "Enrique",
+      "customer_last_name": "Abril",
+      "email": "kiketachira@gmail.com",
+      "phone_number": "+57-300-105-7454",
+      "customer_start_date": "2023-09-15",
+      "years_as_customer": 1,
+      "billing_address": {
+        "street": "Calle 35a sur #23a-52",
+        "city": "Bogotá",
+        "state": "Cundinamarca",
+        "zip": "110111"
+      },
+      "purchase_history": [
+        {
+          "date": "2023-10-05",
+          "items": [
+            {
+              "product_id": "zht-ultra-01",
+              "name": "Zapatilla Ultra (cuero) - Suela negra",
+              "quantity": 1
+            }
+          ],
+          "total_amount": 99.900
+        },
+        {
+          "date": "2023-12-22",
+          "items": [
+            {
+              "product_id": "zht-copa-02",
+              "name": "Zapatilla Copa (sintética) - Suela torretin",
+              "quantity": 2
+            }
+          ],
+          "total_amount": 179.800
+        },
+        {
+          "date": "2024-03-11",
+          "items": [
+            {
+              "product_id": "personalization-001",
+              "name": "Personalización: Nombre y número bordado",
+              "quantity": 3
+            }
+          ],
+          "total_amount": 15.000
+        }
+      ],
+      "loyalty_points": 62,
+      "preferred_store": "Zapatillas Hat Trick - Bogotá (Principal)",
+      "communication_preferences": {
+        "email": true,
+        "sms": true,
+        "push_notifications": true
+      },
+      "garden_profile": {
+        "type": "jugador_microfutbol",
+        "size": "adulto",
+        "sun_exposure": "interior",
+        "soil_type": "cemento",
+        "interests": ["futsal", "entrenamientos", "torneos"]
+      },
+      "scheduled_appointments": {
+        "factory_visit": {
+          "date": "2025-05-02",
+          "time": "10:30",
+          "location": "Bodega Hat Trick"
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "hola"
+          }
+        ],
+        "role": "user"
+      },
+      "invocation_id": "inv-001",
+      "author": "user",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-001",
+      "timestamp": 1741218414.968405
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "¡Hola Enrique! Bienvenido de nuevo a Zapatillas Hat Trick. ¿Quieres revisar tus pedidos anteriores, personalizar un nuevo par o agendar una visita a nuestra fábrica?\n"
+          }
+        ],
+        "role": "model"
+      },
+      "invocation_id": "inv-001",
+      "author": "zht_virtual_agent",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-002",
+      "timestamp": 1741218417.294981
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "quiero ver zapatillas para cemento"
+          }
+        ],
+        "role": "user"
+      },
+      "invocation_id": "inv-002",
+      "author": "user",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-003",
+      "timestamp": 1741218430.720243
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Claro, te recomiendo las zapatillas con suela negra o de colores. Algunas opciones ideales para cemento son:\n\n- **Ultra (cuero)** con suela negra\n- **Copa (sintética)** con suela de colores\n- **Sala (sintética)** para alto agarre\n\n¿Te gustaría agregar alguna al carrito o ver precios?"
+          }
+        ],
+        "role": "model"
+      },
+      "invocation_id": "inv-002",
+      "author": "zht_virtual_agent",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-004",
+      "timestamp": 1741218433.274337
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "agrega una Ultra al carrito"
+          }
+        ],
+        "role": "user"
+      },
+      "invocation_id": "inv-003",
+      "author": "user",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-005",
+      "timestamp": 1741218458.923355
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "function_call": {
+              "name": "modify_cart",
+              "args": {
+                "customer_id": "001",
+                "items_to_add": [
+                  {
+                    "product_id": "zht-ultra-01",
+                    "quantity": 1
+                  }
+                ],
+                "items_to_remove": []
+              }
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "invocation_id": "inv-003",
+      "author": "zht_virtual_agent",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-006",
+      "timestamp": 1741218461.223306
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "function_response": {
+              "name": "modify_cart",
+              "response": {
+                "status": "success",
+                "message": "Carrito actualizado exitosamente.",
+                "items_added": true,
+                "items_removed": false
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocation_id": "inv-003",
+      "author": "zht_virtual_agent",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-007",
+      "timestamp": 1741218463.540000
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Listo, añadí una Zapatilla Ultra (cuero) con suela negra a tu carrito. ¿Te gustaría personalizarla con tu nombre y número?"
+          }
+        ],
+        "role": "model"
+      },
+      "invocation_id": "inv-003",
+      "author": "zht_virtual_agent",
+      "actions": {
+        "state_delta": {},
+        "artifact_delta": {}
+      },
+      "id": "evt-008",
+      "timestamp": 1741218465.940000
+    }
+  ],
+  "last_update_time": 1741218714.258285
+}

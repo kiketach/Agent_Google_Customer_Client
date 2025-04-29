@@ -1,0 +1,92 @@
+[
+  {
+    "query": "hola",
+    "expected_tool_use": [],
+    "reference": "¡Hola Enrique! Bienvenido nuevamente a Zapatillas Hat Trick. Soy Camila, tu asistente virtual. ¿En qué puedo ayudarte hoy?"
+  },
+  {
+    "query": "¿puedes decirme qué compré antes?",
+    "expected_tool_use": [
+      {
+        "tool_name": "access_cart_information",
+        "tool_input": {
+          "customer_id": "123"
+        }
+      }
+    ],
+    "reference": "¡Claro que sí! Este es un resumen de tus pedidos anteriores:\n - 2024-02-10: 4 pares de Zamba en cuero, suela negra, personalizados.\n - 2024-05-01: 2 pares de Dynamic en sintético, suela torretin, sin personalización.\n - 2024-06-12: 6 pares de Nova personalizados con nombre y número.\n\n¿Quieres repetir alguno de estos pedidos o modificar algo?"
+  },
+  {
+    "query": "ah sí, las Copa. Las usamos pero no nos duraron mucho. ¿Tienen alguna recomendación para un modelo más resistente?",
+    "expected_tool_use": [],
+    "reference": "Lamento saber eso, Carlos. Las Copa son hechas en material SINTETICO de alta calidad, pero si buscas mayor resistencia, te recomiendo los modelos *Nova*, *Master*, *Ultra* o *Zamba* en cuero. Tienen mejor durabilidad para uso frecuente y condiciones más exigentes. ¿Te gustaría ver sus opciones de color y suelas?"
+  },
+  {
+    "query": "sí por favor",
+    "expected_tool_use": [
+      {
+        "tool_name": "get_product_recommendations",
+        "tool_input": {
+          "plant_type": "Zapatillas resistentes para uso frecuente",
+          "customer_id": "123"
+        }
+      }
+    ],
+    "reference": "Perfecto. Según tu historial y lo que estás buscando, te recomendaría:\n- *Master en cuero* con suela negra: ideal para cemento o asfalto.\n- *Zamba en cuero* con suela goma: muy buena tracción en pisos lisos.\n\nAmbas ofrecen gran durabilidad y posibilidad de personalización. ¿Quieres agregarlas al carrito?"
+  },
+  {
+    "query": "¿qué tengo actualmente en el carrito?",
+    "expected_tool_use": [
+      {
+        "tool_name": "access_cart_information",
+        "tool_input": {
+          "customer_id": "123"
+        }
+      }
+    ],
+    "reference": "Revisando tu carrito actual, tienes:\n\n- 2 pares de Dynamic sintéticas, suela torretin\n- 1 par de Zamba en cuero, suela negra, personalizado con 'Andrés #9'\n\n¿Deseas modificar algo o agregar más pares?"
+  },
+  {
+    "query": "la Zamba sirve para césped?",
+    "expected_tool_use": [],
+    "reference": "Buena pregunta. El modelo Zamba funciona bien en diferentes superficies dependiendo de la suela que elijas:\n- Si es para césped sintético, te recomiendo pedirla con **suela torretin**.\n- La suela negra o de colores es mejor para cemento y asfalto.\n¿Quieres cambiar la suela de tu par en el carrito?"
+  },
+  {
+    "query": "ok",
+    "expected_tool_use": [
+      {
+        "tool_name": "get_product_recommendations",
+        "tool_input": {
+          "plant_type": "Zapatillas para césped sintético",
+          "customer_id": "123"
+        }
+      }
+    ],
+    "reference": "He revisado las recomendaciones para césped sintético. Las mejores opciones son:\n- Zamba en cuero con suela torretin\n- Sala en sintético con suela torretin\n\nTienes una Zamba en el carrito, solo sería ajustar la suela. ¿Quieres que lo haga?"
+  },
+  {
+    "query": "sí, finalicemos el pedido",
+    "expected_tool_use": [],
+    "reference": "Perfecto, Carlos. Este es el resumen de tu pedido:\n\n- 2 x Dynamic sintéticas (suela torretin)\n- 1 x Zamba en cuero (suela torretin, personalizado 'Andrés #9')\n\nEl total sería aproximadamente 247.800 COP (sin incluir envío). ¿Te gustaría que te genere el enlace para pago o prefieres recoger en la bodega?\nAdemás, por ser cliente frecuente, ¿te gustaría un código QR con 10% de descuento válido por 30 días?"
+  },
+  {
+    "query": "sí, quiero el 10%",
+    "expected_tool_use": [
+      {
+        "tool_name": "generate_qr_code",
+        "tool_input": {
+          "customer_id": "123",
+          "discount_type": "percentage",
+          "expiration_days": 30,
+          "discount_value": 10
+        }
+      }
+    ],
+    "reference": "¡Genial! He generado un código QR con el 10% de descuento, válido por 30 días para tu próxima compra. Lo recibirás por WhatsApp o correo registrado. \n¿Deseas proceder con el pago o quieres que te agende una recogida en la bodega?"
+  },
+  {
+    "query": "no, eso es todo. gracias",
+    "expected_tool_use": [],
+    "reference": "¡Con gusto, Carlos! Me alegra haberte podido ayudar. Tu pedido está listo y el código de descuento activo. Si necesitas algo más, no dudes en volver. ¡Gracias por confiar en Zapatillas Hat Trick y que tengas un excelente día en la cancha! ⚽👟"
+  }
+]
