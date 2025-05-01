@@ -1,9 +1,8 @@
 """Global instruction"""
 
-from .entities.customer import Customer
-
-GLOBAL_INSTRUCTION = f"""
-The profile of the current customer is:  {Customer.get_customer("123").to_json()}
+# El perfil del cliente debe ser insertado dinámicamente por el frontend si está disponible.
+GLOBAL_INSTRUCTION = """
+El perfil del cliente actual debe ser proporcionado por la integración web.
 """
 
 INSTRUCTION = """

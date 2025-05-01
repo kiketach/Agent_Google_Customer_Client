@@ -1,28 +1,133 @@
 import logging
 import uuid
 from datetime import datetime, timedelta
+from typing import Optional
+import os
 
 logger = logging.getLogger(__name__)
 
 
-def send_call_companion_link(phone_number: str) -> str:
+def send_call_companion_link(
+    phone_number: str,
+    date: str,
+    start_time: str,
+    end_time: str,
+    company_email: str,
+    user_email: Optional[str] = None
+) -> dict:
     """
-    Sends a link to the user's phone number to start a video session.
+    Schedules a Google Meet call, sends the link to the user via chat, and emails the company.
 
     Args:
-        phone_number (str): The phone number to send the link to.
+        phone_number (str): The user's phone number.
+        date (str): Date of the call (YYYY-MM-DD).
+        start_time (str): Start time (HH:MM, 24h).
+        end_time (str): End time (HH:MM, 24h).
+        company_email (str): Email to notify the company.
+        user_email (str, optional): User's email (for calendar invite).
 
     Returns:
-        dict: A dictionary with the status and message.
-
-    Example:
-        >>> send_call_companion_link(phone_number='+12065550123')
-        {'status': 'success', 'message': 'Link sent to +12065550123'}
+        dict: Status and Meet link or error message.
     """
+    import pytz
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+    import smtplib
+    from email.mime.text import MIMEText
 
-    logger.info("Sending call companion link to %s", phone_number)
+    logger.info("Scheduling Meet call for %s on %s from %s to %s", phone_number, date, start_time, end_time)
 
-    return {"status": "success", "message": f"Link sent to {phone_number}"}
+    # --- Google Calendar Setup ---
+    SCOPES = ['https://www.googleapis.com/auth/calendar']
+    SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE', 'service_account.json')
+    CALENDAR_ID = os.getenv('GOOGLE_CALENDAR_ID', 'Hat trick')
+    TIMEZONE = os.getenv('GOOGLE_CALENDAR_TIMEZONE', 'America/Bogota')
+
+    # Parse datetime
+    start_dt = datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M")
+    end_dt = datetime.strptime(f"{date} {end_time}", "%Y-%m-%d %H:%M")
+    tz = pytz.timezone(TIMEZONE)
+    start_dt = tz.localize(start_dt)
+    end_dt = tz.localize(end_dt)
+
+    # Authenticate with Google
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+        service = build('calendar', 'v3', credentials=credentials)
+    except Exception as e:
+        logger.error("Google API auth failed: %s", e)
+        return {"status": "error", "message": "Google API authentication failed."}
+
+    # Check for conflicting events
+    try:
+        events_result = service.events().list(
+            calendarId=CALENDAR_ID,
+            timeMin=start_dt.isoformat(),
+            timeMax=end_dt.isoformat(),
+            singleEvents=True,
+            orderBy='startTime'
+        ).execute()
+        events = events_result.get('items', [])
+        for event in events:
+            if event.get('conferenceData'):
+                return {"status": "conflict", "message": "There is already a video call scheduled at this time."}
+    except Exception as e:
+        logger.error("Error checking calendar: %s", e)
+        return {"status": "error", "message": "Failed to check calendar."}
+
+    # Create event with Meet link
+    event_body = {
+        'summary': 'Videollamada con cliente',
+        'description': f'Videollamada agendada para {phone_number}',
+        'start': {'dateTime': start_dt.isoformat(), 'timeZone': TIMEZONE},
+        'end': {'dateTime': end_dt.isoformat(), 'timeZone': TIMEZONE},
+        'attendees': [{'email': company_email}],
+        'conferenceData': {
+            'createRequest': {
+                'requestId': str(uuid.uuid4()),
+                'conferenceSolutionKey': {'type': 'hangoutsMeet'}
+            }
+        },
+    }
+    if user_email:
+        event_body['attendees'].append({'email': user_email})
+
+    try:
+        event = service.events().insert(
+            calendarId=CALENDAR_ID,
+            body=event_body,
+            conferenceDataVersion=1
+        ).execute()
+        meet_link = event['conferenceData']['entryPoints'][0]['uri']
+    except Exception as e:
+        logger.error("Error creating event: %s", e)
+        return {"status": "error", "message": "Failed to create Meet event."}
+
+    # Send email to company
+    try:
+        smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
+        smtp_port = int(os.getenv('SMTP_PORT', 587))
+        smtp_user = os.getenv('SMTP_USER')
+        smtp_pass = os.getenv('SMTP_PASS')
+        msg = MIMEText(f"Se ha agendado una videollamada.\n\nLink: {meet_link}\nCliente: {phone_number}\nFecha: {date} {start_time}-{end_time}")
+        msg['Subject'] = 'Nueva videollamada agendada'
+        msg['From'] = smtp_user
+        msg['To'] = company_email
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, [company_email], msg.as_string())
+    except Exception as e:
+        logger.error("Error sending email: %s", e)
+        # Not critical, continue
+
+    # Return link for chat
+    return {
+        "status": "success",
+        "message": f"Videollamada agendada. Link: {meet_link}",
+        "meet_link": meet_link
+    }
 
 
 def approve_discount(discount_type: str, value: float, reason: str) -> str:

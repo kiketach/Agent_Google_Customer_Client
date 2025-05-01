@@ -8,7 +8,6 @@ from google.adk.models import LlmRequest
 from typing import Any, Dict
 from google.adk.tools import BaseTool
 from google.adk.agents.invocation_context import InvocationContext
-from customer_service.entities.customer import Customer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -112,9 +111,5 @@ def before_tool(
 
 # checking that the customer profile is loaded as state.
 def before_agent(callback_context: InvocationContext):
-    if "customer_profile" not in callback_context.state:
-        callback_context.state["customer_profile"] = Customer.get_customer(
-            "123"
-        ).to_json()
-
-    # logger.info(callback_context.state["customer_profile"])
+    # Ya no se carga ningún perfil de cliente por defecto. El frontend debe enviar el perfil real del cliente si está autenticado.
+    pass

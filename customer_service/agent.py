@@ -1,6 +1,7 @@
 import logging
 import warnings
 from google.adk import Agent
+from dotenv import load_dotenv
 from .config import Config
 from .prompts import GLOBAL_INSTRUCTION, INSTRUCTION
 from .shared_libraries.callbacks import (
@@ -22,6 +23,8 @@ from .tools.tools import (
     send_care_instructions,
     generate_qr_code,
 )
+
+load_dotenv()
 
 warnings.filterwarnings("ignore", category=UserWarning, module=".*pydantic.*")
 

@@ -1,5 +1,4 @@
 """Configuration module for the customer service agent."""
-
 import os
 import logging
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -19,7 +18,7 @@ class AgentModel(BaseModel):
 
 class Config(BaseSettings):
     """Configuration settings for agent."""
-
+    GOOGLE_SERVICE_ACCOUNT_FILE: str = "service_account.json"
     model_config = SettingsConfigDict(
         env_file=os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "../.env"
